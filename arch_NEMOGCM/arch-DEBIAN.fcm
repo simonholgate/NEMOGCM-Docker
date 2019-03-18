@@ -30,8 +30,8 @@
 #  - unix variables "$..." are accpeted and will be evaluated before calling fcm.
 #  - fcm variables are starting with a % (and not a $)
 #
-%NCDF_HOME           /usr
-%HDF5_HOME           /usr/lib/x86_64-linux-gnu/hdf5/openmpi
+%NCDF_HOME           /usr/local
+%HDF5_HOME           /usr/local
 %XIOS_HOME           /SRC/XIOS
 
 %NCDF_INC            -I%NCDF_HOME/include -I%HDF5_HOME/include
@@ -45,7 +45,7 @@
 %FFLAGS              %FCFLAGS
 %LD                  %FC
 %FPPFLAGS            -x f77-cpp-input -ffree-form -ffree-line-length-none
-%LDFLAGS             -lstdc++ -lmpi_cxx
+%LDFLAGS             -lstdc++ -lmpicxx
 %AR                  ar 
 %ARFLAGS             -r
 %MK                  make
