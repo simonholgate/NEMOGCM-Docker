@@ -49,7 +49,6 @@ RUN chown ${USER}:${USER} ${HYDRA_HOST_FILE}
 
 #### ADD DEFAULT USER ####
 ARG USER=${NEMO_USER}
-ENV USER ${USER}
 ENV USER_HOME /home/${USER}
 RUN useradd -d ${USER_HOME} -m ${USER} -s /bin/bash \
       && echo "${USER}   ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
