@@ -42,7 +42,7 @@ RUN mkdir -p /etc/opt
 RUN echo "export HYDRA_HOST_FILE=${HYDRA_HOST_FILE}" >> /etc/profile
 RUN echo "export EXP=${EXP}" >> /etc/profile
 # Set ports that MPICH should use. Needs to be open on firewall - see provison.sh
-RUN echo "export MPIR_CVAR_CH3_PORT_RANGE=10000:10100" >> /etc/profile
+RUN echo "export MPIR_CVAR_CH3_PORT_RANGE=10000:11000" >> /etc/profile
 
 RUN touch ${HYDRA_HOST_FILE}
 RUN chown ${USER}:${USER} ${HYDRA_HOST_FILE}
@@ -80,7 +80,7 @@ RUN mkdir /var/run/sshd
 RUN echo 'root:MpiPwd1' | chpasswd
 RUN echo 'mpi:MpiPwd1' | chpasswd
 RUN  sed -i "s/#PasswordAuthentication.*/PasswordAuthentication no/g" /etc/ssh/sshd_config \
-  && sed -i "s/PermitRootLogin.*/PermitRootLogin no/g" /etc/ssh/sshd_config \
+  && sed -i "s/PermitRootLogin.*/PermitRootLogin yes/g" /etc/ssh/sshd_config \
   && sed -i "s/UsePAM yes/#UsePAM yes/g" /etc/ssh/sshd_config \
   && sed -i "s/#AuthorizedKeysFile/AuthorizedKeysFile/g" /etc/ssh/sshd_config \
   && echo "AllowUsers root mpi" >> /etc/ssh/sshd_config
@@ -101,7 +101,7 @@ ONBUILD USER root
 ONBUILD COPY ssh/ ${SSHDIR}/
 
 ONBUILD RUN cat ${SSHDIR}/*.pub >> ${SSHDIR}/authorized_keys
-ONBUILD RUN chmod -R 600 ${SSHDIR}/* \
+ONBUILD RUN chmod -R 0600 ${SSHDIR}/* \
          && chown -R ${USER}:${USER} ${SSHDIR}
 
 # Switch back to default user when continue the build process
