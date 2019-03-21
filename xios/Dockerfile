@@ -41,8 +41,10 @@ RUN mkdir ${WDIR} && mkdir -p ${MNT_DIR}
 
 WORKDIR ${WDIR}
 
-RUN svn co -r 9709 \
-    http://forge.ipsl.jussieu.fr/nemo/svn/branches/UKMO/dev_r8814_surge_modelling_Nemo4/NEMOGCM NEMOGCM
+#RUN svn co -r 9709 \
+#    http://forge.ipsl.jussieu.fr/nemo/svn/branches/UKMO/dev_r8814_surge_modelling_Nemo4/NEMOGCM NEMOGCM
+RUN svn co http://forge.ipsl.jussieu.fr/nemo/svn/trunk/NEMOGCM@8395 trunk_NEMOGCM_r8395 \
+    && ln -s trunk_NEMOGCM_r8395 NEMOGCM
 
 RUN svn co http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/branchs/xios-2.5 xios-2.5_head \
     && ln -s xios-2.5_head XIOS
@@ -54,14 +56,14 @@ WORKDIR ${XDIR}
 # Enable test_client to be built
 RUN sed -i "s/#bld::target test_client.exe/bld::target test_client.exe/" /SRC/XIOS/bld.cfg
 # Build XIOS
-RUN ./make_xios --dev --netcdf_lib netcdf4_par --arch DEBIAN
+RUN ./make_xios --full --prod --netcdf_lib netcdf4_par --arch DEBIAN
 
 WORKDIR ${CDIR}
 
 RUN echo "Y N N N N N N N" | ./makenemo -n ${CONFIG} -m DEBIAN clean
 RUN ln -s  ${XDIR}/bin/xios_server.exe ${EXP}/xios_server.exe
 
-RUN echo "bld::tool::fppkeys  key_nosignedzero key_diainstant key_mpp_mpi key_iomput" >> \
-    ${CONFIG}/cpp_${CONFIG}.fcm
+COPY cpp_INDIAN_OCEAN.fcm ${CONFIG}/cpp_${CONFIG}.fcm
+ADD MY_SRC.tar.gz ${CONFIG}/
 
 RUN echo "Y N N N N N N N" | ./makenemo -n ${CONFIG} -m DEBIAN 
