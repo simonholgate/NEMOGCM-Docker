@@ -1,4 +1,4 @@
-FROM eu.gcr.io/bobeas-hpc/nemo/xios:v3 as xios
+FROM eu.gcr.io/bobeas-hpc/nemo/xios:v4 as xios
 FROM eu.gcr.io/bobeas-hpc/debian:jessie as onbuild
 
 # Based on alpine-mpich by Nikyle Nguyen <NLKNguyen@MSN.com>
